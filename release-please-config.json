@@ -1,0 +1,8 @@
+{
+  "last-release-sha": "9a254e476a8fae374ac6cdfd6a0295dfb496d5bd",
+  "packages": {
+    ".": {
+      "release-type": "python"
+    }
+  }
+}
