@@ -6,11 +6,10 @@ grant usage on schema core to application role app_public;
 
 create or replace procedure core.hello()
   returns string
-  language sql
-  execute as owner
-  as
-  begin
-    return 'Hello Snowflake!';
-  end;
+  language python
+  runtime_version = '3.11'
+  packages = ('snowflake-snowpark-python')
+  imports = ('/procedures/procedures.py')
+  handler = 'procedures.hello';
 
 grant usage on procedure core.hello() to application role app_public;
