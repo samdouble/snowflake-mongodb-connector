@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          release-type: python
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up SnowCLI
+        run: |
+          curl -O https://sfc-repo.snowflakecomputing.com/snowflake-cli/linux_x86_64/3.3.0/snowflake-cli-3.3.0.x86_64.deb
+          sudo dpkg -i snowflake-cli-3.3.0.x86_64.deb
+          snow --version
+      - name: Deploy native app
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+        run: |
+          mkdir -p ~/.snowflake
+          touch ~/.snowflake/config.toml
+          echo "default_connection_name = 'defaultconnection'" >> ~/.snowflake/config.toml
+          echo "[connections]" >> ~/.snowflake/config.toml
+          echo "[connections.defaultconnection]" >> ~/.snowflake/config.toml
+          echo "account = '${SNOWFLAKE_ACCOUNT}'" >> ~/.snowflake/config.toml
+          echo "user = '${SNOWFLAKE_USER}'" >> ~/.snowflake/config.toml
+          echo "password = '${SNOWFLAKE_PASSWORD}'" >> ~/.snowflake/config.toml
+          echo "role = '${SNOWFLAKE_ROLE}'" >> ~/.snowflake/config.toml
+          echo "warehouse = '${SNOWFLAKE_WAREHOUSE}'" >> ~/.snowflake/config.toml
+          echo "database = '${SNOWFLAKE_DATABASE}'" >> ~/.snowflake/config.toml
+          echo "schema = '${SNOWFLAKE_SCHEMA}'" >> ~/.snowflake/config.toml
+          chmod 0600 ~/.snowflake/config.toml
+          snow connection test -c defaultconnection
+          snow app run -c defaultconnection
+          snow sql -q "call snowflake_mongodb_connector.core.hello()" -c defaultconnection

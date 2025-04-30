@@ -1,0 +1,35 @@
+name: Checks
+
+on: [pull_request]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commitlint
+        uses: wagoid/commitlint-github-action@v6
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      # - name: Install
+      #   run: |
+      #     npm install
+      # - name: Lint
+      #   run: |
+      #     npm run lint
+      # - name: Audit
+      #   run: |
+      #     npm run audit -- --moderate=6 --high=6
+      # - name: Test
+      #   run: |
+      #     npm test
+      # - name: Build
+      #   run: |
+      #     npm run build
