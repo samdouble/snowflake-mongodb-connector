@@ -62,5 +62,6 @@ jobs:
           echo "schema = '${SNOWFLAKE_SCHEMA}'" >> ~/.snowflake/config.toml
           chmod 0600 ~/.snowflake/config.toml
           snow connection test -c defaultconnection
+          snow app validate -c defaultconnection
           snow app run -c defaultconnection
-          snow sql -q "call snowflake_mongodb_connector.core.hello()" -c defaultconnection
+          snow sql -q "call snowflake_mongodb_connector.core.ping()" -c defaultconnection
