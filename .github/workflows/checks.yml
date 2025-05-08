@@ -18,49 +18,27 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      # - name: Install
-      #   run: |
-      #     npm install
-      # - name: Lint
-      #   run: |
-      #     npm run lint
-      # - name: Audit
-      #   run: |
-      #     npm run audit -- --moderate=6 --high=6
-      # - name: Test
-      #   run: |
-      #     npm test
-      # - name: Build
-      #   run: |
-      #     npm run build
-      - name: Set up SnowCLI
+      - name: Install
         run: |
-          curl -O https://sfc-repo.snowflakecomputing.com/snowflake-cli/linux_x86_64/3.3.0/snowflake-cli-3.3.0.x86_64.deb
-          sudo dpkg -i snowflake-cli-3.3.0.x86_64.deb
-          snow --version
-      - name: Deploy native app
-        env:
-          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_ROLE }}
-          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
-          SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+          pip install -U poetry
+          poetry install --no-root
+      - name: Lint
         run: |
-          mkdir -p ~/.snowflake
-          touch ~/.snowflake/config.toml
-          echo "default_connection_name = 'defaultconnection'" >> ~/.snowflake/config.toml
-          echo "[connections]" >> ~/.snowflake/config.toml
-          echo "[connections.defaultconnection]" >> ~/.snowflake/config.toml
-          echo "account = '${SNOWFLAKE_ACCOUNT}'" >> ~/.snowflake/config.toml
-          echo "user = '${SNOWFLAKE_USER}'" >> ~/.snowflake/config.toml
-          echo "password = '${SNOWFLAKE_PASSWORD}'" >> ~/.snowflake/config.toml
-          echo "role = '${SNOWFLAKE_ROLE}'" >> ~/.snowflake/config.toml
-          echo "warehouse = '${SNOWFLAKE_WAREHOUSE}'" >> ~/.snowflake/config.toml
-          echo "database = '${SNOWFLAKE_DATABASE}'" >> ~/.snowflake/config.toml
-          echo "schema = '${SNOWFLAKE_SCHEMA}'" >> ~/.snowflake/config.toml
-          chmod 0600 ~/.snowflake/config.toml
-          snow connection test -c defaultconnection
-          snow app run -c defaultconnection
-          snow sql -q "call snowflake_mongodb_connector.core.hello()" -c defaultconnection
+          poetry run ruff check .
+      - name: Format
+        run: |
+          poetry run ruff format .
+      # - name: Type check
+      #   run: |
+      #     poetry run mypy .
+      - name: Create requirements.txt for Audit
+        run: |
+          poetry self add poetry-plugin-export
+          poetry export -f requirements.txt --output requirements.txt
+      - name: Audit
+        uses: pypa/gh-action-pip-audit@v1.1.0
+        with:
+          inputs: requirements.txt
+      - name: Test
+        run: |
+          poetry run pytest

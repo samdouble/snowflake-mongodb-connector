@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["samdouble <not-real@not-real.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+pymongo = {extras = ["srv"], version = "^4.12.1"}
+snowflake-snowpark-python = "^1.32.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.16.0"
+pytest = "^8.4.0"
+ruff = "^0.11.13"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
