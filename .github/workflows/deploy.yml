@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          release-type: python
+          release-type: simple
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up SnowCLI
@@ -43,5 +43,6 @@ jobs:
           echo "schema = '${SNOWFLAKE_SCHEMA}'" >> ~/.snowflake/config.toml
           chmod 0600 ~/.snowflake/config.toml
           snow connection test -c defaultconnection
+          snow app validate -c defaultconnection
           snow app run -c defaultconnection
-          snow sql -q "call snowflake_mongodb_connector.core.hello()" -c defaultconnection
+          snow sql -q "call snowflake_mongodb_connector.core_code_public.ping()" -c defaultconnection
