@@ -9,7 +9,7 @@ create or replace procedure core.test_connection()
   language python
   runtime_version = '3.11'
   packages = ('snowflake-snowpark-python')
-  imports = ('/procedures/connection.py')
+  imports = ('libs/pymongo-4.12.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl', '/procedures/connection.py')
   handler = 'connection.test_connection';
 grant usage on procedure core.test_connection() to application role app_public;
 
