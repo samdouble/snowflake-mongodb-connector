@@ -4,7 +4,7 @@ create application role if not exists app_public;
 create schema if not exists core;
 grant usage on schema core to application role app_public;
 
-create or replace procedure core.test_connection()
+create or replace procedure core.test_connection(connection_string string, database string, collection string)
   returns variant
   language python
   runtime_version = '3.11'
