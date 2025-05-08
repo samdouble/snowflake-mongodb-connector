@@ -5,7 +5,7 @@ create schema if not exists core;
 grant usage on schema core to application role app_public;
 
 create or replace procedure core.test_connection()
-  returns string
+  returns variant
   language python
   runtime_version = '3.11'
   packages = ('snowflake-snowpark-python')
@@ -14,7 +14,7 @@ create or replace procedure core.test_connection()
 grant usage on procedure core.test_connection() to application role app_public;
 
 create or replace procedure core.ping()
-  returns string
+  returns variant
   language python
   runtime_version = '3.11'
   packages = ('snowflake-snowpark-python')
