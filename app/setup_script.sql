@@ -4,12 +4,20 @@ create application role if not exists app_public;
 create schema if not exists core;
 grant usage on schema core to application role app_public;
 
-create or replace procedure core.hello()
+create or replace procedure core.test_connection()
   returns string
   language python
   runtime_version = '3.11'
   packages = ('snowflake-snowpark-python')
-  imports = ('/procedures/procedures.py')
-  handler = 'procedures.hello';
+  imports = ('/procedures/connection.py')
+  handler = 'connection.test_connection';
+grant usage on procedure core.test_connection() to application role app_public;
 
-grant usage on procedure core.hello() to application role app_public;
+create or replace procedure core.ping()
+  returns string
+  language python
+  runtime_version = '3.11'
+  packages = ('snowflake-snowpark-python')
+  imports = ('/procedures/utils.py')
+  handler = 'utils.ping';
+grant usage on procedure core.ping() to application role app_public;
