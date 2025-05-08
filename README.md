@@ -1,9 +1,6 @@
 # snowflake-mongodb-connector
 
-## Introduction
-
 [![CI](https://github.com/samdouble/snowflake-mongodb-connector/actions/workflows/checks.yml/badge.svg)](https://github.com/samdouble/snowflake-mongodb-connector/actions/workflows/checks.yml)
-[![npm version](https://img.shields.io/npm/v/snowflake-mongodb-connector.svg?style=flat)](https://www.npmjs.org/package/snowflake-mongodb-connector)
 [![Coverage Status](https://coveralls.io/repos/samdouble/snowflake-mongodb-connector/badge.svg?branch=master&service=github)](https://coveralls.io/github/samdouble/snowflake-mongodb-connector?branch=master)
 
 This is the basic project template for a Snowflake Native App project. It contains minimal code meant to help you set up your first application object in your account quickly.
