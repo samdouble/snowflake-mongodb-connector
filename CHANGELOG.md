@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/samdouble/snowflake-mongodb-connector/compare/v1.0.0...v1.1.0) (2025-06-14)
+
+
+### Features
+
+* add a test_connection procedure ([b2f61eb](https://github.com/samdouble/snowflake-mongodb-connector/commit/b2f61eba5c1e25aa21d14a56a3a0ad32c7f4d98e))
+
 ## 1.0.0 (2025-05-08)
 
 
